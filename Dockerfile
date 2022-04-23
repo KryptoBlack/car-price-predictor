@@ -5,8 +5,8 @@ WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install -r requirements.txt --no-cache-dir
 
-EXPOSE 8000
+EXPOSE 8501
 
-ENTRYPOINT [ "streamlit", "run", "app.py", "--server.port", "8000" ]
+ENTRYPOINT [ "streamlit", "run", "app.py" ]
