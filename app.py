@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import numpy as np
 import pandas as pd
+import traceback
 
 model = pickle.load(open('car_price_prediction.pkl','rb'))
 
@@ -87,24 +88,7 @@ def main():
 
     if st.button("Estimate Price", key='predict'):
         try:
-            Model = model  #get_model() 
-            print([
-                mileage, 
-                Kms_Driven, 
-                torque_log, 
-                seater, 
-                engine_op_number_sqaure, 
-                max_power_number_sqaure,
-                Car_age_log,
-                Fuel_Type_Diesel,
-                Fuel_Type_CNG,
-                Fuel_Type_Petrol,
-                Seller_Type_Individual,
-                int(not Seller_Type_Individual),
-                Transmission_Mannual,
-                a, b, c, d
-            ])           
-            
+            Model = model  #get_model()           
             features = np.array([[
                 mileage, 
                 Kms_Driven, 
@@ -122,7 +106,6 @@ def main():
                 a, b, c, d
             ]])
             datafr = pd.DataFrame(features, columns=["mileage_number", "km_driven_sqaure", "torque_log","seats","engine_op_number_sqaure","max_power_number_sqaure","Car_age_log","fuel_Diesel","fuel_LPG","fuel_Petrol","seller_type_Individual","seller_type_Trustmark Dealer","transmission_Manual","owner_Fourth & Above Owner","owner_Second Owner","owner_Test Drive Car", "owner_Third Owner"])
-
             prediction = Model.predict(datafr)
             output = round(prediction[0],2)
             if output<0:
@@ -130,8 +113,9 @@ def main():
             else:
                 st.success("You can sell the car for {} lakhs 🙌".format(output))
         except Exception as e:
-            # st.warning("Opps!! Something went wrong\nTry again")
-            st.warning("Error: {}".format(e))
+            print(traceback.format_exc())
+            st.warning("Opps!! Something went wrong\nTry again")
+            # st.warning("Error: {}".format(e))
 
 
 if __name__ == '__main__':
